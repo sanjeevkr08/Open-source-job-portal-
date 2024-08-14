@@ -2,7 +2,6 @@
 
 **sanjeev kumar **  
 **Full-stack web development**  
-**Rohit sir **  
 **aug-14-2024**
 
 ## Introduction
@@ -15,17 +14,15 @@ The Open Source Job Portal is a web application that connects job seekers with e
 | |-- /js
 | |-- index.html
 |-- /backend
-| |-- /models
-| |-- /routes
-| |-- app.js
+| |-- server.js
 |-- /database
-| |-- schema.sql
-|-- README.md
+| |-- my.sql
+
 
 
 ## Technical Stack
 - **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Node.js / Django / Ruby on Rails (choose one)
+- **Backend**: Node.js
 - **Database**: MySQL
 - **Version Control**: Git
 
@@ -57,16 +54,20 @@ The Open Source Job Portal is a web application that connects job seekers with e
 ## Screenshots and Visuals
 *Home Page - The main landing page of the job portal.*
 
-![homepage](<Screenshot (120).png>)
+![Screenshot (120)](https://github.com/user-attachments/assets/43d3ead3-4803-427d-addc-de72df4dd6c5)
 
 ![Registeration and login]
-(<Screenshot (123).png>)(<Screenshot (124).png>)
+(![Screenshot (123)](https://github.com/user-attachments/assets/227b806a-fbae-4e8e-a610-01a4bd0e249d)
+)(![Screenshot (124)](https://github.com/user-attachments/assets/067d62ee-91b0-465e-b489-8992e0957865)
+)
 
 
 *Job Listings - A view showing available job postings.*
-![job listing ](<Screenshot (125).png>)
+![job listing ](![Screenshot (125)](https://github.com/user-attachments/assets/f3b34e7b-10bc-46b5-a45a-8b4a0ecb8feb)
+)
 
-![Employer Dashboard](<Screenshot (126).png>)
+![Employer Dashboard](![Screenshot (126)](https://github.com/user-attachments/assets/7a2f8611-239d-42c9-a376-61bc12a5f82b)
+)
 *Employer Dashboard - A dashboard for employers to manage their job listings.*
 
 ## Database Structure
@@ -91,13 +92,10 @@ The database schema consists of the following tables:
   - `deadline`: DATE
   - `employer_id`: INT (Foreign Key)
 
-- **Applications Table**:
-  - `id`: INT (Primary Key)
-  - `job_id`: INT (Foreign Key)
-  - `seeker_id`: INT (Foreign Key)
+![database ](![Screenshot (129)](https://github.com/user-attachments/assets/8cacf017-0cbd-4c4f-9754-e532b7f22eb4) 
+![Screenshot (130)](https://github.com/user-attachments/assets/b1fb0b62-2a03-4b00-beb5-a1d6e2df61e5)
 
-![Database Schema](<Screenshot (129).png>)
-![database ](<Screenshot (130).png>)
+
 *Database Schema - Visual representation of the database structure.*
 
 ## Challenges Faced
