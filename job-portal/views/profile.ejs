@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Job Portal</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f3;
+            color: #333;
+        }
+
+        header {
+            background-color: #4A90E2;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2,
+        h3 {
+            color: #4A90E2;
+        }
+
+        .profile-info,
+        .edit-profile {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #f7f9fc;
+        }
+
+        .profile-info p {
+            margin: 8px 0;
+        }
+
+        form label {
+            display: block;
+            margin: 12px 0 5px;
+            font-weight: bold;
+        }
+
+        form input,
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        form button {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        form button:hover {
+            background-color: #357ABD;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f8f8;
+            margin-top: 20px;
+        }
+
+        .profile-picture {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            margin-right: 15px;
+            border: 2px solid #4A90E2;
+        }
+
+        .profile-picture input[type="file"] {
+            display: none;
+        }
+
+        .profile-picture label {
+            background-color: #4A90E2;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .profile-section {
+            display: none;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            nav ul li {
+                display: block;
+                margin: 5px 0;
+            }
+
+            main {
+                padding: 15px;
+            }
+
+            .profile-picture {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-picture img {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            form input,
+            form textarea {
+                font-size: 14px;
+            }
+
+            form button {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            .profile-picture img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>User Profile</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="#" id="logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div id="jobSeekerProfile" class="profile-section">
+            <h2>Your Job Seeker Profile</h2>
+            <div class="profile-picture">
+                <img src="default-profile.jpg" alt="Profile Picture" id="jobSeekerImg">
+                <input type="file" id="jobSeekerPicInput" accept="image/*">
+                <label for="jobSeekerPicInput">Change Picture</label>
+            </div>
+            <div class="profile-info">
+                <p><strong>Name:</strong> <span id="displaySeekerName"></span></p>
+                <p><strong>Email:</strong> <span id="displaySeekerEmail"></span></p>
+                <p><strong>Phone:</strong> <span id="displaySeekerPhone"></span></p>
+                <p><strong>Skills:</strong> <span id="displaySeekerSkills"></span></p>
+                <p><strong>Work History:</strong> <span id="displaySeekerHistory"></span></p>
+            </div>
+        </div>
+
+        
+        <div class="edit-profile">
+            <h3>Edit Profile (Job Seeker)</h3>
+            <form id="jobSeekerForm">
+                <label for="seekerName">Full Name:</label>
+                <input type="text" id="seekerName" name="name" required>
+
+                <label for="seekerEmail">Email:</label>
+                <input type="email" id="seekerEmail" name="email" required>
+
+                <label for="seekerPhone">Phone Number:</label>
+                <input type="tel" id="seekerPhone" name="phone" required>
+
+                <label for="seekerSkills">Skills / Expertise:</label>
+                <textarea id="seekerSkills" name="skills" rows="3"></textarea>
+
+                <label for="seekerHistory">Work History:</label>
+                <textarea id="seekerHistory" name="history" rows="3"></textarea>
+
+                <button type="submit">Save Job Seeker Profile</button>
+            </form>
+        </div>
+
+        
+        <div id="employerProfile" class="profile-section">
+            <h2>Your Employer Profile</h2>
+            <div class="profile-picture">
+                <img src="default-company-logo.jpg" alt="Company Logo" id="employerImg">
+                <input type="file" id="employerPicInput" accept="image/*">
+                <label for="employerPicInput">Change Logo</label>
+            </div>
+            <div class="profile-info">
+                <p><strong>Company Name:</strong> <span id="displayCompanyName"></span></p>
+                <p><strong>Email:</strong> <span id="displayCompanyEmail"></span></p>
+                <p><strong>Phone:</strong> <span id="displayCompanyPhone"></span></p>
+                <p><strong>Location:</strong> <span id="displayLocation"></span></p>
+                <p><strong>Job Openings:</strong> <span id="displayJobOpenings"></span></p>
+            </div>
+        </div>
+
+        
+        <div class="edit-profile">
+            <h3>Edit Employer Profile</h3>
+            <form id="employerForm">
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" name="companyName" required>
+
+                <label for="companyEmail">Email:</label>
+                <input type="email" id="companyEmail" name="companyEmail" required>
+
+                <label for="companyPhone">Phone Number:</label>
+                <input type="tel" id="companyPhone" name="companyPhone" required>
+
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+
+                <label for="jobOpenings">Job Openings:</label>
+                <textarea id="jobOpenings" name="jobOpenings" rows="3"></textarea>
+
+                <button type="submit">Save Employer Profile</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Job Portal. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const jobSeekerForm = document.getElementById('jobSeekerForm');
+            const employerForm = document.getElementById('employerForm');
+
+           
+            const savedJobSeeker = JSON.parse(localStorage.getItem('jobSeekerProfile'));
+            const savedEmployer = JSON.parse(localStorage.getItem('employerProfile'));
+
+            if (savedJobSeeker) {
+                displayJobSeekerProfile(savedJobSeeker);
+            }
+            if (savedEmployer) {
+                displayEmployerProfile(savedEmployer);
+            }
+
+            
+            jobSeekerForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const name = document.getElementById('seekerName').value;
+                const email = document.getElementById('seekerEmail').value;
+                const phone = document.getElementById('seekerPhone').value;
+                const skills = document.getElementById('seekerSkills').value;
+                const history = document.getElementById('seekerHistory').value;
+
+               
+                const jobSeekerProfile = { name, email, phone, skills, history };
+
+           
+                localStorage.setItem('jobSeekerProfile', JSON.stringify(jobSeekerProfile));
+
+               
+                displayJobSeekerProfile(jobSeekerProfile);
+                jobSeekerForm.reset(); 
+            });
+
+            
+            employerForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const companyName = document.getElementById('companyName').value;
+                const companyEmail = document.getElementById('companyEmail').value;
+                const companyPhone = document.getElementById('companyPhone').value;
+                const location = document.getElementById('location').value;
+                const jobOpenings = document.getElementById('jobOpenings').value;
+
+               
+                const employerProfile = { companyName, companyEmail, companyPhone, location, jobOpenings };
+
+              
+                localStorage.setItem('employerProfile', JSON.stringify(employerProfile));
+
+             
+                displayEmployerProfile(employerProfile);
+                employerForm.reset();
+            });
+
+           
+            const jobSeekerPicInput = document.getElementById('jobSeekerPicInput');
+            jobSeekerPicInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('jobSeekerImg').src = e.target.result;
+                        saveJobSeekerImage(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+          
+            const employerPicInput = document.getElementById('employerPicInput');
+            employerPicInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('employerImg').src = e.target.result;
+                        saveEmployerImage(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            function saveJobSeekerImage(imageSrc) {
+                const profile = JSON.parse(localStorage.getItem('jobSeekerProfile')) || {};
+                profile.image = imageSrc;
+                localStorage.setItem('jobSeekerProfile', JSON.stringify(profile));
+            }
+
+            function saveEmployerImage(imageSrc) {
+                const profile = JSON.parse(localStorage.getItem('employerProfile')) || {};
+                profile.image = imageSrc;
+                localStorage.setItem('employerProfile', JSON.stringify(profile));
+            }
+
+            function displayJobSeekerProfile(profile) {
+                document.getElementById('displaySeekerName').innerText = profile.name;
+                document.getElementById('displaySeekerEmail').innerText = profile.email;
+                document.getElementById('displaySeekerPhone').innerText = profile.phone;
+                document.getElementById('displaySeekerSkills').innerText = profile.skills;
+                document.getElementById('displaySeekerHistory').innerText = profile.history;
+                if (profile.image) {
+                    document.getElementById('jobSeekerImg').src = profile.image;
+                }
+                document.getElementById('jobSeekerProfile').style.display = 'block'; 
+            }
+
+            function displayEmployerProfile(profile) {
+                document.getElementById('displayCompanyName').innerText = profile.companyName;
+                document.getElementById('displayCompanyEmail').innerText = profile.companyEmail;
+                document.getElementById('displayCompanyPhone').innerText = profile.companyPhone;
+                document.getElementById('displayLocation').innerText = profile.location;
+                document.getElementById('displayJobOpenings').innerText = profile.jobOpenings;
+                if (profile.image) {
+                    document.getElementById('employerImg').src = profile.image; 
+                }
+                document.getElementById('employerProfile').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

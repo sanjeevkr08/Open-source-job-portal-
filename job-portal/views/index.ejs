@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Job Portal</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="dashboard">Dashboard</a></li> <!-- Added Dashboard link -->
+        </ul>
+    </nav>
+    
+</head>
+<body>
+
+    <section class="search">
+        <h2>Find Your Dream Job</h2>
+        <form id="jobSearchForm" action="#" method="get">
+            <div class="error" id="errorMessage"></div>
+            <input type="text" name="keywords" id="keywords" placeholder="Keywords" required>
+            <input type="text" name="location" id="location" placeholder="Location" required>
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('jobSearchForm').addEventListener('submit', function(event) {
+            let keywords = document.getElementById('keywords').value.trim();
+            let location = document.getElementById('location').value.trim();
+            let errorMessage = document.getElementById('errorMessage');
+
+            if (!keywords || !location) {
+                event.preventDefault();
+                errorMessage.textContent = 'Please fill out all required fields (Keywords and Location).';
+            } else {
+                errorMessage.textContent = '';
+            }
+        });
+    </script>
+
+
+    <section class="msg-index">
+        <div style="text-align: center; margin: 20px;">
+            <h2>Welcome to the Open Source Job Portal</h2>
+            <p>
+                The Open Source Job Portal is a dynamic web application designed to connect job seekers
+                 with job listings from various employers. Our mission is to create an accessible platform 
+                 that allows users to find job opportunities easily while also enabling employers to post job
+                  listings effectively.
+            </p>
+        </div>
+
+        <div class="cta-buttons">
+            <a href="/login" class="button">Login</a>
+            <a href="/register" class="button">Register</a>
+        </div>
+        
+    </section>
+
+    <footer>
+        <p>© 2024 Job Portal. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/profile.php?id=100020327229270" target="_blank">Facebook</a>
+          <a href="https://www.linkedin.com/in/sanjeev-kumar-a85749186/" target="_blank">LinkedIn</a>
+          <a href="https://www.instagram.com/mercyless_sanju/" target="_blank">Instagram</a>
+          <a href="https://github.com/sanjeevkr08" target="_blank">GitHub</a>
+        </div>
+      </footer>
+
+      <script src="/js/script.js"></script>
+</body>
+
+</html>

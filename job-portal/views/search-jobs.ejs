@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings - Job Portal</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1>Available Job Listings</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About </a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="search" id="job-search">
+            <h2>Search and Filter Jobs</h2>
+            <form id="jobSearchForm" action="/search-jobs" method="GET">
+                <input type="text" name="keywords" placeholder="Keywords" required>
+                <input type="text" name="location" placeholder="Location" required>
+                <button type="submit">Search</button>
+            </form>
+            
+        </section>
+        
+        <section class="job-listings">
+            <h2>Available Jobs</h2>
+            <ul id="jobList">
+                <% if (jobs && jobs.length > 0) { %>
+                    <ul>
+                        <% jobs.forEach(job => { %>
+                            <li>
+                                <h3><%= job.title %></h3>
+                                <p><%= job.description %></p>
+                                <p>Location: <%= job.location %></p>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No jobs found matching your criteria.</p>
+                <% } %>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 Job Portal. All rights reserved.</p>
+    </footer>
+    <script src="/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Job Portal</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<style>
+
+    main {
+        padding: 20px; /* Optional: adds padding around the main container */
+    }
+    
+    #registerForm {
+        display: flex;
+        flex-direction: column; /* Arrange children in a column */
+    }
+    
+    #registerForm input,
+    #registerForm select,
+    #registerForm textarea,
+    #registerForm button {
+        margin-bottom: 15px; /* Space between each element */
+        padding: 10px; /* Optional: padding inside inputs and button */
+        border: 1px solid #ccc; /* Optional: border for inputs */
+        border-radius: 4px; /* Optional: rounded corners */
+    }
+    
+    #registerForm button {
+        background-color: #007bff; /* Button color */
+        color: white; /* Text color for the button */
+        cursor: pointer; /* Change cursor to pointer on hover */
+    }
+    
+    #registerForm button:hover {
+        background-color: #0056b3; /* Darker button color on hover */
+    }
+    
+    main {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    input[type="email"],
+    input[type="password"] {
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+    button {
+        padding: 0.5rem;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    p {
+        text-align: center;
+    }
+</style>
+<body>
+    <header>
+        <h1>Login to Job Portal</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form id="registerForm" action="/register" method="post">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <select name="user_type" required><br>
+          <option value="" disabled selected>Select User Type</option>
+          <option value="job_seeker">Job Seeker</option>
+          <option value="employer">Employer</option>
+      </select>
+      <textarea name="contact_details" placeholder="Contact Details" required></textarea>
+      <textarea name="skills" placeholder="Skills (comma-separated)" required></textarea>
+      <textarea name="work_history" placeholder="Work History" required></textarea>
+      <button type="submit">Register</button>
+  </form>
+          
+          <p>Already have an account? <a href="/login">Login here</a>.</p>
+      </main>
+    <footer>
+        <p>© 2024 Job Portal. All rights reserved.</p>
+    </footer>
+</body>
+</html>

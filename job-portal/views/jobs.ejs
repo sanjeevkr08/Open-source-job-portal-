@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings - Job Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+           background-color: yellowgreen;
+        }
+        header, footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .search, .job-listings {
+            padding: 20px;
+        }
+        .job-listings ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        .job-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .job-item h3 {
+            margin: 10px 0;
+        }
+        .job-item .job-image {
+            width: 50%; /* Make the image responsive */
+            height: 60%; /* Maintain the aspect ratio */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            margin-bottom: 10px; /* Spacing below the image */
+        }
+        .apply-button {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 16px;
+        }
+        .apply-button:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }.search {
+            padding: 20px;
+            background-color: #fff;
+            max-width: 600px;
+            margin: 50px auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .search h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .search form {
+            display: flex;
+            flex-direction: column;
+        }
+        .search input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .search button {
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search button:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search {
+                max-width: 90%;
+                margin: 30px auto;
+            }
+            .search h2 {
+                font-size: 20px;
+            }
+            .search input[type="text"],
+            .search button {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search {
+                max-width: 95%;
+                margin: 20px auto;
+                padding: 15px;
+            }
+            .search h2 {
+                font-size: 18px;
+            }
+            .search input[type="text"],
+            .search button {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Available Job Listings</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="search" id="job-search">
+            <h2>Search and Filter Jobs</h2>
+            <form id="jobSearchForm" action="/search-jobs" method="GET">
+                <div class="error" id="errorMessage"></div>
+                <input type="text" name="keywords" id="keywords" placeholder="Keywords" required>
+                <input type="text" name="location" id="location" placeholder="Location" required>
+                <button type="submit">Search</button>
+            </form>
+        </section>
+    
+        <script>
+            document.getElementById('jobSearchForm').addEventListener('submit', function(event) {
+                let keywords = document.getElementById('keywords').value.trim();
+                let location = document.getElementById('location').value.trim();
+                let errorMessage = document.getElementById('errorMessage');
+    
+                if (!keywords || !location) {
+                    event.preventDefault();
+                    errorMessage.textContent = 'Please fill out all fields.';
+                } else {
+                    errorMessage.textContent = '';
+                }
+            });
+        </script>
+        
+        <section class="job-listings">
+            <h2>Available Jobs</h2>
+            <ul id="jobList">
+                <li class="job-item">
+                    <h3>Software Engineer</h3>
+                    <img src="/img/Software Engineer.jpg" alt="Software Engineer" class="job-image">
+                    <p><strong>Company:</strong> Google</p>
+                    <p><strong>Location:</strong> Mountain View, CA</p>
+                    <p><strong>Eligibility:</strong> BSc in Computer Science or related field</p>
+                    <p><strong>Salary:</strong> $120,000 - $150,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Developing and maintaining web applications, collaborating with cross-functional teams...</p>
+                    <button class="apply-button" data-job="Software Engineer" data-company="Google" data-location="india">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Web Developer</h3>
+                    <img src="/img/web-developer.jpg" alt="Web Developer" class="job-image">
+                    <p><strong>Company:</strong> Amazon</p>
+                    <p><strong>Location:</strong> Seattle, WA</p>
+                    <p><strong>Eligibility:</strong> Experience in HTML, CSS, JavaScript</p>
+                    <p><strong>Salary:</strong> $95,000 - $115,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Building and maintaining websites...</p>
+                    <button class="apply-button" data-job="Web Developer" data-company="Amazon" data-location="Seattle, WA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Data Scientist</h3>
+                    <img src="/img/datascientist.jpg" alt="Data Scientist" class="job-image">
+                    <p><strong>Company:</strong> Facebook</p>
+                    <p><strong>Location:</strong> Menlo Park, CA</p>
+                    <p><strong>Eligibility:</strong> Master's in Data Science or related field</p>
+                    <p><strong>Salary:</strong> $130,000 - $160,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Analyze complex data sets...</p>
+                    <button class="apply-button" data-job="Data Scientist" data-company="Facebook" data-location="Menlo Park, CA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>UX/UI Designer</h3>
+                    <img src="/img/ux-ui-designer.jpg" alt="UX/UI Designer" class="job-image">
+                    <p><strong>Company:</strong> Adobe</p>
+                    <p><strong>Location:</strong> San Jose, CA</p>
+                    <p><strong>Eligibility:</strong> Portfolio of design projects</p>
+                    <p><strong>Salary:</strong> $90,000 - $110,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Designing user-friendly interfaces...</p>
+                    <button class="apply-button" data-job="UX/UI Designer" data-company="Adobe" data-location="San Jose, CA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>System Administrator</h3>
+                    <img src="/img/systems-administrator.jpg" alt="System Administrator" class="job-image">
+                    <p><strong>Company:</strong> IBM</p>
+                    <p><strong>Location:</strong> Armonk, NY</p>
+                    <p><strong>Eligibility:</strong> Experience with network administration</p>
+                    <p><strong>Salary:</strong> $80,000 - $100,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Managing server environments...</p>
+                    <button class="apply-button" data-job="System Administrator" data-company="IBM" data-location="Armonk, NY">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Marketing Specialist</h3>
+                    <img src="/img/Marketing Specialist.jpg" alt="Marketing Specialist" class="job-image">
+                    <p><strong>Company:</strong> HubSpot</p>
+                    <p><strong>Location:</strong> Cambridge, MA</p>
+                    <p><strong>Eligibility:</strong> BA in Marketing or related</p>
+                    <p><strong>Salary:</strong> $70,000 - $90,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Developing marketing strategies...</p>
+                    <button class="apply-button" data-job="Marketing Specialist" data-company="HubSpot" data-location="Cambridge, MA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Sales Executive</h3>
+                    <img src="/img/sales-executive.jpg" alt="Sales Executive" class="job-image">
+                    <p><strong>Company:</strong> Salesforce</p>
+                    <p><strong>Location:</strong> San Francisco, CA</p>
+                    <p><strong>Eligibility:</strong> Proven sales experience</p>
+                    <p><strong>Salary:</strong> $80,000 - $100,000 + Commission</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Identifying and contacting potential clients...</p>
+                    <button class="apply-button" data-job="Sales Executive" data-company="Salesforce" data-location="San Francisco, CA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Graphic Designer</h3>
+                    <img src="/img/graphic-designer.jpg" alt="Graphic Designer" class="job-image">
+                    <p><strong>Company:</strong> Etsy</p>
+                    <p><strong>Location:</strong> Brooklyn, NY</p>
+                    <p><strong>Eligibility:</strong> Portfolio with creative projects</p>
+                    <p><strong>Salary:</strong> $60,000 - $80,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Creating visual content for marketing...</p>
+                    <button class="apply-button" data-job="Graphic Designer" data-company="Etsy" data-location="Brooklyn, NY">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>IT Support Specialist</h3>
+                    <img src="/img/it-support-specialist.jpg" alt="IT Support Specialist" class="job-image">
+                    <p><strong>Company:</strong> Dell Technologies</p>
+                    <p><strong>Location:</strong> Round Rock, TX</p>
+                    <p><strong>Eligibility:</strong> Experience with tech support</p>
+                    <p><strong>Salary:</strong> $50,000 - $70,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Providing tech support to clients...</p>
+                    <button class="apply-button" data-job="IT Support Specialist" data-company="Dell Technologies" data-location="Round Rock, TX">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Content Writer</h3>
+                    <img src="/img/content-writer.jpg" alt="Content Writer" class="job-image">
+                    <p><strong>Company:</strong> LinkedIn</p>
+                    <p><strong>Location:</strong> Sunnyvale, CA</p>
+                    <p><strong>Eligibility:</strong> Bachelor's in English or related</p>
+                    <p><strong>Salary:</strong> $55,000 - $75,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Creating content for blogs and websites...</p>
+                    <button class="apply-button" data-job="Content Writer" data-company="LinkedIn" data-location="Sunnyvale, CA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Network Engineer</h3>
+                    <img src="/img/network-engineer.jpg" alt="Network Engineer" class="job-image">
+                    <p><strong>Company:</strong> Cisco Systems</p>
+                    <p><strong>Location:</strong> San Jose, CA</p>
+                    <p><strong>Eligibility:</strong> Bachelor's in Computer Engineering</p>
+                    <p><strong>Salary:</strong> $100,000 - $120,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Designing and implementing network solutions...</p>
+                    <button class="apply-button" data-job="Network Engineer" data-company="Cisco Systems" data-location="San Jose, CA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>DevOps Engineer</h3>
+                    <img src="/img/devops-engineer.jpg" alt="DevOps Engineer" class="job-image">
+                    <p><strong>Company:</strong> Tesla</p>
+                    <p><strong>Location:</strong> Palo Alto, CA</p>
+                    <p><strong>Eligibility:</strong> Experience in CI/CD pipelines</p>
+                    <p><strong>Salary:</strong> $115,000 - $140,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Streamlining operations and processes...</p>
+                    <button class="apply-button" data-job="DevOps Engineer" data-company="Tesla" data-location="Palo Alto, CA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Mobile App Developer</h3>
+                    <img src="/img/mobile-app-developer.jpg" alt="Mobile App Developer" class="job-image">
+                    <p><strong>Company:</strong> Spotify</p>
+                    <p><strong>Location:</strong> New York, NY</p>
+                    <p><strong>Eligibility:</strong> Experience with iOS/Android development</p>
+                    <p><strong>Salary:</strong> $100,000 - $130,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Designing and building mobile applications...</p>
+                    <button class="apply-button" data-job="Mobile App Developer" data-company="Spotify" data-location="New York, NY">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Cybersecurity Analyst</h3>
+                    <img src="/img/cybersecurity-analyst.jpg" alt="Cybersecurity Analyst" class="job-image">
+                    <p><strong>Company:</strong> NortonLifeLock</p>
+                    <p><strong>Location:</strong> Tempe, AZ</p>
+                    <p><strong>Eligibility:</strong> Experience in information security</p>
+                    <p><strong>Salary:</strong> $85,000 - $105,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Monitoring and responding to security threats...</p>
+                    <button class="apply-button" data-job="Cybersecurity Analyst" data-company="NortonLifeLock" data-location="Tempe, AZ">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Cloud Architect</h3>
+                    <img src="/img/cloud-architect.jpg" alt="Cloud Architect" class="job-image">
+                    <p><strong>Company:</strong> Oracle</p>
+                    <p><strong>Location:</strong> Redwood City, CA</p>
+                    <p><strong>Eligibility:</strong> Experience in cloud computing</p>
+                    <p><strong>Salary:</strong> $130,000 - $160,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Designing cloud services architecture...</p>
+                    <button class="apply-button" data-job="Cloud Architect" data-company="Oracle" data-location="Redwood City, CA">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Database Administrator</h3>
+                    <img src="/img/database-administrator.jpg" alt="Database Administrator" class="job-image">
+                    <p><strong>Company:</strong> PostgreSQL</p>
+                    <p><strong>Location:</strong> Chicago, IL</p>
+                    <p><strong>Eligibility:</strong> Experience with SQL and database management</p>
+                    <p><strong>Salary:</strong> $90,000 - $110,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Maintaining database systems and integrity...</p>
+                    <button class="apply-button" data-job="Database Administrator" data-company="PostgreSQL" data-location="Chicago, IL">Apply</button>
+                </li>
+                <li class="job-item">
+                    <h3>Business Analyst</h3>
+                    <img src="/img/business-analyst.jpg" alt="Business Analyst" class="job-image">
+                    <p><strong>Company:</strong> Deloitte</p>
+                    <p><strong>Location:</strong> New York, NY</p>
+                    <p><strong>Eligibility:</strong> Experience in business analysis</p>
+                    <p><strong>Salary:</strong> $80,000 - $100,000</p>
+                    <p><strong>Job Type:</strong> Full-time</p>
+                    <p><strong>Details:</strong> Analyzing business processes and requirements...</p>
+                    <button class="apply-button" data-job="Business Analyst" data-company="Deloitte" data-location="New York, NY">Apply</button>
+                </li>
+            </ul>
+        </section>
+        
+    </main>
+    <footer>
+        <p>© 2024 Job Portal. All rights reserved.</p>
+    </footer>
+    
+    <!-- Modal for Apply Form -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Apply for Job</h2>
+            <form id="applyForm">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <input type="text" name="job" readonly>
+                <input type="text" name="location" readonly>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+        }
+        
+        /* Job Listings Section */
+        .job-listings {
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px auto;
+            border-radius: 8px;
+            max-width: 1200px;
+        }
+        
+        .job-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+            padding: 15px;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .job-item:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .job-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        
+        .apply-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .apply-button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        form input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        form button:hover {
+            background-color: #218838;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .job-item {
+                padding: 10px;
+            }
+        
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 15px;
+            }
+        
+            form input {
+                font-size: 14px;
+            }
+        
+            form button {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .job-item {
+                margin: 5px 0;
+            }
+        
+            form input {
+                font-size: 12px;
+            }
+        
+            form button {
+                font-size: 12px;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const jobSearchForm = document.getElementById('jobSearchForm');
+            const applyModal = document.getElementById('applyModal');
+            const applyForm = document.getElementById('applyForm');
+            const closeBtn = document.querySelector('.close-button');
+
+            jobSearchForm.addEventListener('submit', (event) => {
+                const keywords = jobSearchForm.elements['keywords'].value;
+                const location = jobSearchForm.elements['location'].value;
+
+                console.log(`Keywords: ${keywords}, Location: ${location}`);
+
+                if (!keywords || !location) {
+                    event.preventDefault();
+                    alert("Please fill in both fields.");
+                }
+            });
+
+            document.querySelectorAll('.apply-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const job = event.target.getAttribute('data-job');
+                    const company = event.target.getAttribute('data-company');
+                    const location = event.target.getAttribute('data-location');
+
+                    applyForm.elements['job'].value = job + ' at ' + company;
+                    applyForm.elements['location'].value = location;
+
+                    applyModal.style.display = 'block';
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                applyModal.style.display = 'none';
+            });
+
+            applyForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                alert("Request submitted");
+                applyModal.style.display = 'none';
+            });
+
+            window.onclick = (event) => {
+                if (event.target == applyModal) {
+                    applyModal.style.display = 'none';
+                }
+            };
+        });
+    </script>
+</body>
+</html>
